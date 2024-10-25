@@ -1,20 +1,19 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 
-# Category Model
 class Category(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     address = models.CharField(max_length=255)
-    phone_number = models.BigIntegerField()
-    rating = models.IntegerField()
+    phone_number = models.IntegerField(max_length=13)
+    rating = models.FloatField()
     image = models.ImageField(upload_to='category_images/')
     delivery_time = models.DateField()
     working_time = models.DateField()
     category_type = models.CharField(max_length=255)
 
     class Meta:
-        ordering = ['name']
+        verbose_name = 'Category'
         verbose_name_plural = 'Categories'
 
     def clean(self):
@@ -33,7 +32,7 @@ class Subcategory(models.Model):
     image = models.ImageField(upload_to='subcategory_images/')
 
     class Meta:
-        ordering = ['name']
+        verbose_name = 'Subcategory'
         verbose_name_plural = 'Subcategories'
 
     def clean(self):
@@ -54,7 +53,7 @@ class Product(models.Model):
     stock = models.IntegerField()
 
     class Meta:
-        ordering = ['name']
+        verbose_name = 'Product'
         verbose_name_plural = 'Products'
 
     def clean(self):
