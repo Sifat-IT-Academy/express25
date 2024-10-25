@@ -7,7 +7,6 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'customer', 'courier', 'status', 'total_price', 'created_at', 'updated_at')  
     list_filter = ('status', 'created_at') 
     search_fields = ('customer__username', 'courier__username')
-    ordering = ('-created_at',)  
 
 @admin.register(ProductOrder)
 class ProductOrderAdmin(admin.ModelAdmin):

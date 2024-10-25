@@ -43,7 +43,7 @@ class PlasticCard(models.Model):
 
 class Address(models.Model):
     user = models.ForeignKey("account.User", on_delete=models.CASCADE,related_name="addresses")
-    label = models.CharField(max_length=200)
+    label = models.CharField(_('label'),max_length=200)
     long = models.DecimalField(max_digits=8, decimal_places=3, blank=True, null=True)
     lat = models.DecimalField(max_digits=8, decimal_places=3, blank=True, null=True)
     city = models.CharField(max_length=35, blank=True, null=True)
