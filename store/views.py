@@ -1,12 +1,11 @@
 from django.shortcuts import render
 from django.views import View
-from store.models import Category
+from store.models import Category, Subcategory
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from store.serializers import StoreSerializer
+from store.serializers import StoreSerializer, SubcategorySerializer
 from rest_framework import status
-
 # class StoreDetailView(View):
 
 #     def get(self, request, id):
@@ -89,8 +88,41 @@ class StoreListAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class SubcategoryDetailView(APIView):
+    
+    def get(self, request, id):
+        subcategory = Subcategory.objects.get(id=id)
+        serializer = SubcategorySerializer(subcategory)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+    
+    def delete(self, request, id, format=None):
+        subcategory = Subcategory.objects.get(id=id)
+        subcategory.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def put(self, request, id, format=None):
+        subcategory = Subcategory.objects.get(id=id)
+        serializer = SubcategorySerializer(subcategory, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class SubcategoryListAPIView(APIView):
+
+    def get(self, request):
+        subcategories = Subcategory.objects.all()
+        serializer = SubcategorySerializer(subcategories, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request, format=None):
+        serializer = SubcategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     #post
 
