@@ -15,3 +15,5 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = ('user', 'label', 'city', 'district', 'postal_code')  # Ko'rinadigan ustunlar
     list_filter = ('city', 'district')  # Filter bo'yicha qidiruv
     search_fields = ('user__username', 'city', 'postal_code')  # Qidiruv maydoni
+
+

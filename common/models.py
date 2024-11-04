@@ -5,6 +5,16 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from datetime import datetime
 
+
+class Common(models.Model):
+    # model maydonlari (fields) shu yerda aniqlanadi
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+    
+    
 class PlasticCard(models.Model):
     user = models.ForeignKey("account.User", on_delete=models.CASCADE, related_name=_("plastic_cards"))
     card_number = models.CharField(_('card_number'),max_length=16)  # 16-digit card number
@@ -57,3 +67,8 @@ class Address(models.Model):
     
     def __str__(self):
         return f"{self.user} from {self.city}"
+
+
+
+
+
