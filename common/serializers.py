@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from common.models import Address
-from account.models import User
+from accounts.models import User
 
 class AddressSerializer(serializers.ModelSerializer):
     # user = Userserializer()  vazifa

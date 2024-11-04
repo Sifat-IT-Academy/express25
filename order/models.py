@@ -1,5 +1,4 @@
 from django.db import models
-from account.models import User
 
 from django.core.exceptions import ValidationError
 
@@ -11,8 +10,8 @@ class Order(models.Model):
         ('completed', 'Completed'),
         ('cancelled', 'Cancelled'),
     ]
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
-    courier = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='courier_orders')
+    customer = models.ForeignKey("accounts.User", on_delete=models.CASCADE, related_name='orders')
+    courier = models.ForeignKey("accounts.User", on_delete=models.SET_NULL, null=True, related_name='courier_orders')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now=True)
