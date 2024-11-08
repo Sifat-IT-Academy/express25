@@ -29,7 +29,7 @@ class Category(models.Model):
         help_text=_("Reyting 0 va 5 orasida bo'lishi kerak."),
         default=3
     )
-    image = models.ImageField(_("Rasm"), upload_to='category_images/', blank=True, null=True)
+    image = models.ImageField(_("Rasm"), upload_to='category_images/',)
     delivery_time = models.DurationField(_("Yetkazib berish vaqti"))
     working_time = models.TimeField(_("Ish vaqti"))
     category_type = models.CharField(_("Store turi"), max_length=255,choices=CATEGORY_TYPE)
@@ -92,12 +92,19 @@ class Product(models.Model):
         verbose_name = _("Mahsulot")
         verbose_name_plural = _("Mahsulotlar")
 
-    def clean(self):
-        super().clean()
-        if self.price <= 0:
-            raise ValidationError(_("Narx 0 dan katta bo'lishi kerak."))
-        if self.stock < 0:
-            raise ValidationError(_("Soni manfiy bo'lishi mumkin emas."))
-
+def clean(self):
+    super().clean()
+    
+    
+    if self.price is not None and self.price <= 0:
+        raise ValidationError(_("Narx 0 dan katta bo'lishi kerak."))
+    
+    
+    if self.stock is not None and self.stock < 0:
+        raise ValidationError(_("Soni manfiy bo'lishi mumkin emas."))
+    
+    
+    if self.image is None:
+            raise ValidationError(_("Rasmni yuklash majburiy."))
     def __str__(self):
         return self.name
