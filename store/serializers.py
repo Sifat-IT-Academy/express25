@@ -5,9 +5,22 @@ from common.serializers import AddressSerializer
 
 
 class StoreSerializer(serializers.ModelSerializer):
-    # address = AddressSerializer(readonly=True)
     class Meta:
         model = Category
         fields =  "__all__"
+    
+
+    def validate(self, data):
+        phone_number = data.get("phone_number")
+        if Category.objects.filter(phone_number=phone_number):
+            raise serializers.ValidationError("Bu telefon nomerdan Dokon yaratilgan")
+
+
+        return super().validate(data)
+    
+
+
+    
+
 
 
