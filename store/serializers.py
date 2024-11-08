@@ -8,7 +8,7 @@ class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields =  "__all__"
-    
+            
 
     def validate(self, data):
         phone_number = data.get("phone_number")
