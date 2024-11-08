@@ -11,7 +11,9 @@ class Category(models.Model):
         "common.Address", 
         on_delete=models.CASCADE, 
         related_name="categories",
-        verbose_name=_("Manzil")
+        verbose_name=_("Manzil"),
+        blank=True,
+        null=True
     )
     phone_number = models.CharField(
         _("Telefon raqam"),

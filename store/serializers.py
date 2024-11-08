@@ -4,10 +4,27 @@ from common.serializers import AddressSerializer
 
 
 class StoreSerializer(serializers.ModelSerializer):
+<<<<<<< HEAD
     address = AddressSerializer(read_only=True)
+=======
+>>>>>>> b3a0babd014d568f2c030b446f65c7f79f200270
     class Meta:
         model = Category
         fields =  "__all__"
+    
+
+    def validate(self, data):
+        phone_number = data.get("phone_number")
+        if Category.objects.filter(phone_number=phone_number):
+            raise serializers.ValidationError("Bu telefon nomerdan Dokon yaratilgan")
+
+
+        return super().validate(data)
+    
+
+
+    
+
 
 def validate_phone_number(self, value):
         if Category.objects.filter(phone_number=value).exists():
