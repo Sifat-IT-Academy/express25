@@ -1,19 +1,14 @@
-<<<<<<< HEAD
+
 from store.models import Category, Subcategory, Product  
 from rest_framework import generics, permissions
 from store.serializers import StoreSerializer, SubcategorySerializer, ProductSerializer 
-=======
-from store.models import Category
-from store.serializers import StoreSerializer
-from rest_framework import generics, permissions
->>>>>>> b3a0babd014d568f2c030b446f65c7f79f200270
 
 
 class StoreDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StoreSerializer
     queryset = Category.objects.all()
     lookup_field = 'id'
-<<<<<<< HEAD
+
 
 class StoreListAPIView(generics.ListCreateAPIView):
     queryset = Category.objects.filter(category_type='Store')
@@ -49,10 +44,4 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
     lookup_field = 'id'
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-=======
-  
-class StoreListAPIView(generics.ListCreateAPIView):
-    queryset = Category.objects.filter(category_type='Store')
-    serializer_class = StoreSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
->>>>>>> b3a0babd014d568f2c030b446f65c7f79f200270
+
