@@ -32,6 +32,7 @@ class PlasticCard(models.Model):
         # Deactivate the card if the expiration date has passed
         if expiration < datetime.now():
             self.is_active = False
+            raise ValidationError(_("Ushbu kartaning amal qilish muddati tugagan va uni ishlatib bo'lmaydi.")) 
 
     def save(self, *args, **kwargs):
         # Perform custom validation before saving
