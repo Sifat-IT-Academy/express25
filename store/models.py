@@ -4,8 +4,9 @@ from django.core.validators import RegexValidator, MinValueValidator, MaxValueVa
 from django.utils.translation import gettext_lazy as _
 
 class Category(models.Model):
+    name = models.CharField(max_length=100)
     CATEGORY_TYPE = (('Store', 'Store'),('Restaurant','Restaurant'),)
-    name = models.CharField(_("Nomi"), max_length=255)
+    # name = models.CharField(_("Nomi"), max_length=255)
     description = models.TextField(_("Tavsif"), blank=True, null=True)
     address = models.ForeignKey(
         "common.Address", 
@@ -51,6 +52,8 @@ class Category(models.Model):
 
 
 class Subcategory(models.Model):
+    name = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(_("Nomi"), max_length=255)
     description = models.TextField(_("Tavsif"), blank=True, null=True)
     category = models.ForeignKey(
