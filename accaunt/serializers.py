@@ -65,3 +65,15 @@ class LoginSerializer(serializers.Serializer):
                 return user
             raise serializers.ValidationError("Invalid login credentials.")
         raise serializers.ValidationError("Must include 'phone_number' and 'password'.")
+
+from .models import Plastik, Address
+
+class PlastikSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Plastik
+        fields = ['id', 'card_number', 'expiry_date', 'holder_name', 'created_at']
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ['id', 'street', 'city', 'state', 'postal_code', 'country', 'created_at']

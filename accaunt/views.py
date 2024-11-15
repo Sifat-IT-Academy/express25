@@ -6,6 +6,9 @@ from rest_framework.authtoken.models import Token
 from .models import User
 from .serializers import RegisterSerializer, LoginSerializer
 from django.contrib.auth import login, logout
+from rest_framework.viewsets import ModelViewSet
+from .models import Plastik, Address
+from .serializers import PlastikSerializer, AddressSerializer
 
 class RegisterView(APIView):
 
@@ -33,3 +36,11 @@ class LogoutView(APIView):
     def post(self, request):
         logout(request)
         return Response({"message": "Logged out successfully."}, status=status.HTTP_200_OK)
+
+class PlastikViewSet(ModelViewSet):
+    queryset = Plastik.objects.all()
+    serializer_class = PlastikSerializer
+
+class AddressViewSet(ModelViewSet):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
