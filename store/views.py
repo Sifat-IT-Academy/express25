@@ -1,14 +1,10 @@
 from django.shortcuts import redirect
 from store.models import Category, Subcategory, Product,Restaurant  
-from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics, permissions
 from store.serializers import StoreSerializer, SubcategorySerializer, ProductSerializer,RestaurantSerializer
 
 # store
-class StorePaginator(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 100
+
 
 
 class StoreDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -22,10 +18,6 @@ class StoreListAPIView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
     # restaurant
-class RestaurantPagination(PageNumberPagination):
-    page_size = 10  # Har bir sahifada 10 ta element ko'rsatiladi
-    page_size_query_param = 'page_size'
-    max_page_size = 100
 
 class RestaurantListCreateAPIView(generics.ListCreateAPIView):
     queryset = Restaurant.objects.all()
@@ -57,10 +49,6 @@ class SubcategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 # product
-class ProductPagination(PageNumberPagination):
-    page_size = 10  # Har bir sahifada 10 ta mahsulot ko'rsatiladi
-    page_size_query_param = 'page_size'
-    max_page_size = 100
 
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
