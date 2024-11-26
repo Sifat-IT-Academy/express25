@@ -1,14 +1,12 @@
-
 from django.db import models
-from django.utils import timezone
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError  
 from datetime import datetime
 
 class PlasticCard(models.Model):
-    user = models.ForeignKey("accaunt.User", on_delete=models.CASCADE, related_name=_("plastic_cards"))
-    card_number = models.CharField(_('card_number'),max_length=16)  # 16-digit card number
-    expiration_date = models.CharField(max_length=5)  # Format: MM/YY
+    user = models.ForeignKey('accaunt.user',on_delete=models.CASCADE,related_name=_("plastic_cards"))
+    card_number = models.CharField(_("card_number"),max_length=16)
+    expiration_date = models.CharField(max_length=5)
     is_active = models.BooleanField(default=True)
 
     class Meta:
@@ -17,51 +15,41 @@ class PlasticCard(models.Model):
 
     def __str__(self):
         return str(self.card_number)
+    
 
-    # Custom validation for card number length
     def clean(self):
-        if not self.card_number.isdigit() or len(self.card_number) != 16:
-            raise ValidationError(_("Card number must be a valid 16-digit number."))
-
-        # Checking expiration date format MM/YY and validity
+        if not self.card_number.isdigit() or len(self.card_number) !=16:
+            raise ValidationError(_("Karta raqami haqiqiy 16 xonali raqam bo'lishi kerak."))
         try:
-            expiration = datetime.strptime(self.expiration_date, "%m/%y")
+            expiration = datetime.strptime(self.card_number, "%m/%y")
         except ValueError:
-            raise ValidationError(_("Expiration date must be in MM/YY format."))
-
-        # Deactivate the card if the expiration date has passed
+            raise ValidationError(_("Yaroqlilik muddati MM/YY formatida bo'lishi kerak."))
         if expiration < datetime.now():
             self.is_active = False
-            raise ValidationError(_("Ushbu kartaning amal qilish muddati tugagan va uni ishlatib bo'lmaydi.")) 
+            raise ValidationError(_("Ushbu kartaning amal qilish muddati tugagan va uni ishlatib bo'lmaydi."))
+         
 
-
-
-
-
-
-
-#salom
-    def save(self, *args, **kwargs):
-        # Perform custom validation before saving
+def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
 
-    
 
 
 class Address(models.Model):
-    user = models.ForeignKey("accaunt.User", on_delete=models.CASCADE,related_name="addresses")
-    label = models.CharField(_('label'),max_length=200)
-    long = models.DecimalField(max_digits=8, decimal_places=3, blank=True, null=True)
-    lat = models.DecimalField(max_digits=8, decimal_places=3, blank=True, null=True)
-    city = models.CharField(max_length=35, blank=True, null=True)
-    district = models.CharField(max_length=100, blank=True, null=True)
-    street_address = models.CharField(max_length=150, blank=True, null=True)
-    postal_code = models.CharField(max_length=100, blank=True, null=True)
+    user = models.ForeignKey('accaunt.user',on_delete=models.CASCADE,related_name=_("addresses"))
+    label = models.CharField(max_length=100)
+    latitude = models.DecimalField(max_digits=6,decimal_places=4,null=True,blank=True)
+    longitude = models.DecimalField(max_digits=6,decimal_places=4,null=True,blank=True) 
+    city = models.CharField(max_length=25)
+    district = models.CharField(max_length=50)
+    street_adress =models.CharField(max_length=150)
+    postal_code = models.IntegerField(null=True,blank=True)
 
     class Meta:
         verbose_name = _("Address")
-        verbose_name_plural = _("Addreses")
-    
+        verbose_name_plural = _("Addresses")
+
     def __str__(self):
         return f"{self.user} from {self.city}"
+
+

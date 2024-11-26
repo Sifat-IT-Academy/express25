@@ -9,7 +9,7 @@ from .models import Delivery
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from .models import Delivery, Review
-from django.core.exceptions import ValidationError  
+from django.core.exceptions import ValidationError                                                                                                      
 
 
 # class DeliveryListCreateAPIView(APIView):
@@ -58,25 +58,25 @@ class DeliveryDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 def delivery_list(request):
-    """All deliveries list."""
+   
     deliveries = Delivery.objects.all()
     return render(request, 'delivery/delivery_list.html', {'deliveries': deliveries})
 
 
 def delivery_detail(request, delivery_id):
-    """Single delivery details."""
+   
     delivery = get_object_or_404(Delivery, id=delivery_id)
     return render(request, 'delivery/delivery_detail.html', {'delivery': delivery})
 
 
 def review_create(request, delivery_id):
-    """Create a review for a specific delivery."""
+   
     delivery = get_object_or_404(Delivery, id=delivery_id)
     if request.method == "POST":
         rating = int(request.POST.get('rating', 5))
         comment = request.POST.get('comment', '')
 
-        # Validating review inputs
+        
         try:
             if rating < 1 or rating > 5:
                 raise ValidationError("Rating 1 dan 5 gacha bo'lishi kerak.")
