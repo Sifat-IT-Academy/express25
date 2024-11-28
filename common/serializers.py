@@ -34,7 +34,7 @@ class PlasticCardSerializer(serializers.ModelSerializer):
         return super().validate(data)
 
     def create(self, validated_data):
-        request = self.context.get('request')  # Access request from serializer context
+        request = self.context.get('request')  
         if request and hasattr(request, 'user'):
-            validated_data['user'] = request.user  # Set the user to the logged-in user
+            validated_data['user'] = request.user  
         return super().create(validated_data)
