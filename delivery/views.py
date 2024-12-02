@@ -6,6 +6,10 @@ from .models import Delivery
 from .serializers import DeliverySerializer
 from rest_framework import generics
 from .models import Delivery
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
+from .models import Delivery, Review
+from django.core.exceptions import ValidationError                                                                                                      
 
 
 # class DeliveryListCreateAPIView(APIView):
@@ -51,3 +55,58 @@ class DeliveryDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Delivery.objects.all()
     serializer_class = DeliverySerializer
     lookup_field = 'id'
+
+
+def delivery_list(request):
+   
+    deliveries = Delivery.objects.all()
+    return render(request, 'delivery/delivery_list.html', {'deliveries': deliveries})
+
+
+def delivery_detail(request, delivery_id):
+   
+    delivery = get_object_or_404(Delivery, id=delivery_id)
+    return render(request, 'delivery/delivery_detail.html', {'delivery': delivery})
+
+
+def review_create(request, delivery_id):
+   
+    delivery = get_object_or_404(Delivery, id=delivery_id)
+    if request.method == "POST":
+        rating = int(request.POST.get('rating', 5))
+        comment = request.POST.get('comment', '')
+
+        
+        try:
+            if rating < 1 or rating > 5:
+                raise ValidationError("Rating 1 dan 5 gacha bo'lishi kerak.")
+            if len(comment) > 500:
+                raise ValidationError("Izoh 500 belgidan oshmasligi kerak.")
+            
+            # Creating Review
+            Review.objects.create(
+                delivery=delivery,
+                rating=rating,
+                comment=comment,
+                customer_name=request.POST.get('customer_name', 'Unknown'),
+                store_name=request.POST.get('store_name', 'Unknown')
+            )
+            return redirect('delivery_detail', delivery_id=delivery.id)
+        except ValidationError as e:
+            return render(request, 'delivery/review_form.html', {
+                'delivery': delivery,
+                'errors': e.messages
+            })
+    return render(request, 'delivery/review_form.html', {'delivery': delivery})
+
+
+def delivery_status_update(request, delivery_id):
+    """Update delivery status."""
+    delivery = get_object_or_404(Delivery, id=delivery_id)
+    if request.method == "POST":
+        status = request.POST.get('status', 'pending')
+        if status in dict(Delivery.STATUS_CHOICES):
+            delivery.status = status
+            delivery.save()
+            return redirect('delivery_detail', delivery_id=delivery.id)
+    return JsonResponse({'error': 'Invalid status'}, status=400)

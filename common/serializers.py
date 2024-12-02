@@ -1,40 +1,53 @@
 from rest_framework import serializers
-from .models import Address, PlasticCard
-from datetime import date
+from datetime import datetime
+from common.models import Address,PlasticCard
 from accaunt.serializers import RegisterSerializer
 
-
-class AddressSerializer(serializers.ModelSerializer):
-    user = RegisterSerializer(read_only=True)  # Display user as read-only
-
-    class Meta:
-        model = Address
-        fields = "__all__"
-        read_only_fields = ['user']  # Ensure user is read-only
-
-    def create(self, validated_data):
-        request = self.context.get('request')  # Access request from serializer context
-        if request and hasattr(request, 'user'):
-            validated_data['user'] = request.user  # Set the user to the logged-in user
-        return super().create(validated_data)
-
-
 class PlasticCardSerializer(serializers.ModelSerializer):
-    user = RegisterSerializer(read_only=True)  # Display user as read-only
-
+    user = RegisterSerializer(read_only=True)
+    user_id = serializers.IntegerField(write_only=True)
     class Meta:
         model = PlasticCard
         fields = "__all__"
-        read_only_fields = ['user']  # Ensure user is read-only
+    def validate(self, attrs):
+        card_number = attrs.get('card_number')
+        expiration_date = attrs.get('expiration_date')
 
-    def validate(self, data):
-        expiration_date = data.get("expiration_date")
-        if expiration_date and expiration_date < date.today():
-            raise serializers.ValidationError("Kartaning amal qilish muddati tugagan.")
-        return super().validate(data)
+        if not card_number.isdigit() or len(card_number) != 16:
+            raise serializers.ValidationError({
+                'card_number': "Karta raqami haqiqiy 16 xonali raqam bo'lishi kerak."
+            })
 
+        try:
+            expiration = datetime.strptime(expiration_date, "%m/%y")
+        except ValueError:
+            raise serializers.ValidationError({
+                'expiration_date': "Yaroqlilik muddati MM/YY formatida bo'lishi kerak."
+            })
+
+        if expiration < datetime.now():
+            raise serializers.ValidationError({
+                'expiration_date': "Ushbu kartaning amal qilish muddati tugagan va uni ishlatib bo'lmaydi."
+            })
+        return attrs
     def create(self, validated_data):
-        request = self.context.get('request')  # Access request from serializer context
+        request = self.context.get('request')  
         if request and hasattr(request, 'user'):
-            validated_data['user'] = request.user  # Set the user to the logged-in user
+            validated_data['user'] = request.user 
         return super().create(validated_data)
+        
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    user = RegisterSerializer(read_only=True)
+    user_id = serializers.IntegerField(write_only=True)
+    class Meta:
+        model = Address
+        fields = "__all__"
+        
+    def create(self, validated_data):
+        request = self.context.get('request')  
+        if request and hasattr(request, 'user'):
+            validated_data['user'] = request.user 
+        return super().create(validated_data)
+

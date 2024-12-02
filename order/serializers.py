@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Order, ProductOrder, Payment
-from account.models import User
+from accaunt.models import User
 from store.models import Product 
 
 class UserSerializer(serializers.ModelSerializer):
