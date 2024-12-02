@@ -82,3 +82,4 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
+    
