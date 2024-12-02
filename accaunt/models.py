@@ -63,3 +63,35 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self) -> str:
         return f'{self.phone_number}'
+
+class Courier(models.Model):
+    user = models.OneToOneField(
+        'User', 
+        on_delete=models.CASCADE, 
+        related_name='courier_profile'  
+    )
+    vehicle_type = models.CharField(
+        max_length=50,
+        choices=[
+            ('bike', 'Bike'),
+            ('car', 'Car'),
+            ('scooter', 'Scooter'),
+        ],
+        blank=True,
+        null=True,
+        help_text="Transport vositasini kiriting: "
+    )
+    license_plate = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        help_text="Avtomobil raqamini kiriting: "
+    )
+    availability = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = 'Courier'
+        verbose_name_plural = 'Couriers'
+
+    def __str__(self) -> str:
+        return f'Courier: {self.user.phone_number} ({self.vehicle_type})'
