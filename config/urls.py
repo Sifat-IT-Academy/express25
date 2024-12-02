@@ -38,8 +38,8 @@ urlpatterns = [
     path('api/v1/delivery/',include('delivery.urls')),
     
 
-    path('addresses/<int:pk>/', AddressViewSet.as_view({'get': 'retrieve'}), name='address-detail'),
-    path('plastic-cards/<int:pk>/', PlasticCardViewSet.as_view({'get': 'retrieve'}), name='plastic-card-detail'),
+    path('addresses/<int:pk>/', AddressViewSet.as_view({'get': 'retrieve','put':'update','patch':'partial_update','delete':'destroy'}), name='address-detail'),
+    path('plastic-cards/<int:pk>/', PlasticCardViewSet.as_view({'get': 'retrieve' ,'put':'update','patch':'partial_update','delete':'destroy'}), name='plastic-card-detail'),
 
     path('api/auth/register/', RegisterView.as_view(), name='register'),
     path('api/auth/login/', LoginView.as_view(), name='login'),

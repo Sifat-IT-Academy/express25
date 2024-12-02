@@ -50,3 +50,4 @@ class AddressSerializer(serializers.ModelSerializer):
         if request and hasattr(request, 'user'):
             validated_data['user'] = request.user 
         return super().create(validated_data)
+
