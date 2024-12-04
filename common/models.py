@@ -21,7 +21,8 @@ class PlasticCard(models.Model):
         if not self.card_number.isdigit() or len(self.card_number) !=16:
             raise ValidationError(_("Karta raqami haqiqiy 16 xonali raqam bo'lishi kerak."))
         try:
-            expiration = datetime.strptime(self.card_number, "%m/%y")
+            expiration = datetime.strptime(self.expiration_date, "%m/%y")
+            
         except ValueError:
             raise ValidationError(_("Yaroqlilik muddati MM/YY formatida bo'lishi kerak."))
         if expiration < datetime.now():

@@ -3,7 +3,7 @@ from .models import Order, ProductOrder, Payment
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'customer', 'courier', 'status', 'total_price', 'created_at', 'updated_at')
+    list_display = ('id', 'customer', 'status', 'total_price', 'created_at', 'updated_at')
     list_filter = ('status', 'created_at', 'updated_at')
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
