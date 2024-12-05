@@ -13,7 +13,6 @@ schema_view = get_schema_view(
         title="Express 25",
         default_version='v1',
         description="Restaurants and Stores delivery service",
-        # terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="express25@gmail.com"),
         license=openapi.License(name="BSD License"),
     ),
@@ -38,8 +37,35 @@ urlpatterns = [
     path('api/v1/delivery/',include('delivery.urls')),
     
 
-    path('addresses/<int:pk>/', AddressViewSet.as_view({'get': 'retrieve','put':'update','patch':'partial_update','delete':'destroy'}), name='address-detail'),
-    path('plastic-cards/<int:pk>/', PlasticCardViewSet.as_view({'get': 'retrieve' ,'put':'update','patch':'partial_update','delete':'destroy'}), name='plastic-card-detail'),
+   # Address uchun
+path(
+    'addresses/',
+    AddressViewSet.as_view({'get': 'list', 'post': 'create'}),
+),
+path(
+    'addresses/<int:pk>/',
+    AddressViewSet.as_view({
+        'get': 'retrieve', 
+        'put': 'update', 
+        'patch': 'partial_update', 
+        'delete': 'destroy'
+    }),
+),
+
+# PlasticCard uchun
+path(
+    'plastic-cards/',
+    PlasticCardViewSet.as_view({'get': 'list', 'post': 'create'}),
+),
+path(
+    'plastic-cards/<int:pk>/',
+    PlasticCardViewSet.as_view({
+        'get': 'retrieve', 
+        'put': 'update', 
+        'patch': 'partial_update', 
+        'delete': 'destroy'
+    }),
+),
 
     path('api/auth/register/', RegisterView.as_view(), name='register'),
     path('api/auth/login/', LoginView.as_view(), name='login'),

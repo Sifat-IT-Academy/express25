@@ -4,8 +4,6 @@ from common.models import Address,PlasticCard
 from accaunt.serializers import RegisterSerializer
 
 class PlasticCardSerializer(serializers.ModelSerializer):
-    user = RegisterSerializer(read_only=True)
-    user_id = serializers.IntegerField(write_only=True)
     class Meta:
         model = PlasticCard
         fields = "__all__"
@@ -39,12 +37,10 @@ class PlasticCardSerializer(serializers.ModelSerializer):
 
 
 class AddressSerializer(serializers.ModelSerializer):
-    user = RegisterSerializer(read_only=True)
-    user_id = serializers.IntegerField(write_only=True)
     class Meta:
         model = Address
         fields = "__all__"
-        
+                
     def create(self, validated_data):
         request = self.context.get('request')  
         if request and hasattr(request, 'user'):
