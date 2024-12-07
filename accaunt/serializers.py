@@ -4,6 +4,11 @@ from .models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 
+class PhoneVerificationSerializer(serializers.Serializer):
+    phone_number = serializers.CharField()
+class VerifyCodeSerializer(serializers.Serializer):
+    phone_number = serializers.CharField()
+    verification_code = serializers.IntegerField()
 
 class RegisterSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True)

@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-m3a!1ydi)9jmt5#kmzo(1*^^18hny**w8fv1(+ta#sg5u@fcb!'
 DEBUG = True
@@ -20,12 +21,12 @@ INSTALLED_APPS = [
     'order',
     'store',
     'rest_framework',
+    'rest_framework_simplejwt',
     'drf_yasg',
-    'dj_rest_auth',
+    'django_filters',
     'allauth',
-    'dj_rest_auth.registration',
-    'rest_framework.authtoken',
-    'django_filters'
+    'rest_framework_simplejwt.token_blacklist',
+
 ]
 
 MIDDLEWARE = [
@@ -70,8 +71,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 5,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
 
@@ -81,7 +81,11 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
 
 
 
@@ -122,3 +126,15 @@ STATIC_URL = 'static/'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # or whatever duration you prefer
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+

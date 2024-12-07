@@ -3,9 +3,9 @@ from django.urls import path,include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from accaunt.views import LogoutView,LoginView,RegisterView
 from common.views import AddressViewSet, PlasticCardViewSet
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenRefreshView
 
 
 schema_view = get_schema_view(
@@ -40,12 +40,7 @@ urlpatterns = [
 
     path('addresses/<int:pk>/', AddressViewSet.as_view({'get': 'retrieve','put':'update','patch':'partial_update','delete':'destroy'}), name='address-detail'),
     path('plastic-cards/<int:pk>/', PlasticCardViewSet.as_view({'get': 'retrieve' ,'put':'update','patch':'partial_update','delete':'destroy'}), name='plastic-card-detail'),
-
-    path('api/auth/register/', RegisterView.as_view(), name='register'),
-    path('api/auth/login/', LoginView.as_view(), name='login'),
-    path('api/auth/logout/', LogoutView.as_view(), name='logout'),
-    path('api/auth/', include('dj_rest_auth.urls')),
-    
+    path('api/account/',include('accaunt.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
