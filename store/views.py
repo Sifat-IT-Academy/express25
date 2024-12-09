@@ -13,7 +13,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 
 # store
-class StoreDetailView(generics.RetrieveUpdateDestroyAPIView):
+class StoreDetailView(generics.RetrieveAPIView):
     serializer_class = StoreSerializer
     queryset = Category.objects.all()
     lookup_field = 'id'
@@ -40,7 +40,7 @@ class RestaurantListAPIView(generics.ListAPIView):
     ordering_fields = ['name', 'rating']
 
 
-class RestaurantDetailView(generics.RetrieveUpdateDestroyAPIView):
+class RestaurantDetailView(generics.RetrieveAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
     lookup_field = 'id'
@@ -48,7 +48,7 @@ class RestaurantDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 # category
-class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+class CategoryDetailView(generics.RetrieveAPIView):
     queryset = Category.objects.filter(category_type='Store')
     serializer_class = StoreSerializer
     lookup_field = 'id'
@@ -62,7 +62,7 @@ class SubcategoryListListAPIView(generics.ListAPIView):
     filterset_fields = ['name', 'parent_category']
     search_fields = ['name']
 
-class SubcategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+class SubcategoryDetailView(generics.RetrieveAPIView):
     queryset = Subcategory.objects.all()
     serializer_class = SubcategorySerializer
     lookup_field = 'id'
@@ -76,7 +76,7 @@ class ProductListAPIView(generics.ListAPIView):
     filterset_fields = ['price', 'category', 'available']
     search_fields = ['name', 'description']
     ordering_fields = ['price', 'name', 'created_at']
-class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
+class ProductDetailView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'id'
