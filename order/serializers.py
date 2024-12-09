@@ -9,7 +9,7 @@ class OrderSerializer(serializers.ModelSerializer):
         read_only_fields = ['created_at', 'updated_at']
 
 class ProductOrderSerializer(serializers.ModelSerializer):
-    product_name = serializers.ReadOnlyField(source='product.name')  # Qo'shimcha ma'lumot
+    product_name = serializers.ReadOnlyField(source='product.name')  # Adding the product name
 
     class Meta:
         model = ProductOrder

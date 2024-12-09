@@ -66,6 +66,8 @@ path(
         'delete': 'destroy'
     }),
 ),
+    path('api/v1/orders/', include('order.urls')),
+
 
     path('api/auth/register/', RegisterView.as_view(), name='register'),
     path('api/auth/login/', LoginView.as_view(), name='login'),
