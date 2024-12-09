@@ -20,7 +20,7 @@ class StoreDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     
-class StoreListAPIView(generics.ListCreateAPIView):
+class StoreListAPIView(generics.ListAPIView):
     queryset = Category.objects.filter(category_type='Store')
     serializer_class = StoreSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -32,7 +32,7 @@ class StoreListAPIView(generics.ListCreateAPIView):
 
 
     # restaurant
-class RestaurantListCreateAPIView(generics.ListCreateAPIView):
+class RestaurantListAPIView(generics.ListAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
@@ -55,7 +55,7 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 # subcategory
-class SubcategoryListCreateAPIView(generics.ListCreateAPIView):
+class SubcategoryListListAPIView(generics.ListAPIView):
     queryset = Subcategory.objects.all()
     serializer_class = SubcategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -69,7 +69,7 @@ class SubcategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 # product
-class ProductListCreateAPIView(generics.ListCreateAPIView):
+class ProductListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
