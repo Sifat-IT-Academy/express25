@@ -1,9 +1,8 @@
-# #Fotima va Sabina , Amal
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 class CustomUserManager(BaseUserManager):
-    def _create_user(self, email=None, phone_number=None, password=None, is_courier=False, gender=None, birth_date=None, **extra_fields):
+    def _create_user(self, email=None, phone_number=None, password=None, **extra_fields):
         if not phone_number:
             raise ValueError("Phone number must be provided")
         if not password:
@@ -13,31 +12,27 @@ class CustomUserManager(BaseUserManager):
         user = self.model(
             email=email,
             phone_number=phone_number,
-            is_courier=is_courier,
-            gender=gender,
-            birth_date=birth_date,
             **extra_fields
         )
-
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, email=None, phone_number=None, password=None, is_courier=False, gender=None, birth_date=None, **extra_fields):
+    def create_user(self, email=None, phone_number=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, phone_number, password, is_courier, gender, birth_date, **extra_fields)
+        return self._create_user(email, phone_number, password, **extra_fields)
 
-    def create_superuser(self, email=None, phone_number=None, password=None, is_courier=False, gender=None, birth_date=None, **extra_fields):
+    def create_superuser(self, email=None, phone_number=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
-        if extra_fields.get('is_staff') is not True:
+        if not extra_fields.get('is_staff'):
             raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
+        if not extra_fields.get('is_superuser'):
             raise ValueError('Superuser must have is_superuser=True.')
 
-        return self._create_user(email, phone_number, password, is_courier, gender, birth_date, **extra_fields)
+        return self._create_user(email, phone_number, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=30, blank=True, null=True)
@@ -46,29 +41,36 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     phone_number = models.CharField(max_length=15, unique=True)
     is_courier = models.BooleanField(default=False)
-    gender = models.CharField(max_length=10, choices=[('M', 'Male'), ('F', 'Female')], blank=True, null=True)  # Add null=True and blank=True
+    gender = models.CharField(
+        max_length=1, 
+        choices=[('M', 'Male'), ('F', 'Female')], 
+        blank=True, 
+        null=True
+    )
     birth_date = models.DateField(null=True, blank=True)
 
-    is_staff = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
 
     objects = CustomUserManager()
-    USERNAME_FIELD = 'phone_number'  
-    REQUIRED_FIELDS = ['email']   
+
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = ['email']
 
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
-    
+
     def __str__(self) -> str:
-        return f'{self.phone_number}'
+        return self.phone_number
+
 
 class Courier(models.Model):
     user = models.OneToOneField(
-        'User', 
+        User, 
         on_delete=models.CASCADE, 
-        related_name='courier_profile'  
+        related_name='courier_profile'
     )
     vehicle_type = models.CharField(
         max_length=50,
@@ -78,20 +80,19 @@ class Courier(models.Model):
             ('scooter', 'Scooter'),
         ],
         blank=True,
-        null=True,
-        help_text="Transport vositasini kiriting: "
+        null=True
     )
     license_plate = models.CharField(
         max_length=20,
         blank=True,
-        null=True,
-        help_text="Avtomobil raqamini kiriting: "
+        null=True
     )
     availability = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Courier'
         verbose_name_plural = 'Couriers'
+        ordering = ['user__phone_number']  # Telefon raqami bo'yicha tartiblash
 
     def __str__(self) -> str:
-        return f'Courier: {self.user.phone_number} ({self.vehicle_type})'
+        return f'Courier: {self.user.phone_number} ({self.vehicle_type or "No vehicle"})'

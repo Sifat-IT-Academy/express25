@@ -26,7 +26,7 @@ class Order(models.Model):
             raise ValidationError("Total price cannot be negative.")
 
     def __str__(self):
-        return f"Order {self.id} by {self.customer.username}"
+        return f"Order {self.id} by {self.customer}"
 
 
 class ProductOrder(models.Model):

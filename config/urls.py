@@ -7,7 +7,7 @@ from common.views import AddressViewSet, PlasticCardViewSet
 from rest_framework.routers import DefaultRouter
 from django.urls import path
 from delivery.views import (
-    DeliveryListView, DeliveryStatusView, ReviewCreateView
+    CreateDeliveryView, DeliveryListView, DeliveryStatusView, ReviewCreateView
 )
 from order.views import (
     OrderCreateView, OrderListView, OrderDetailView, 
@@ -50,6 +50,7 @@ urlpatterns = [
     path('deliveries/', DeliveryListView.as_view(), name='delivery-list'),
     path('deliveries/<int:pk>/', DeliveryStatusView.as_view(), name='delivery-status'),
     path('deliveries/<int:pk>/review/', ReviewCreateView.as_view(), name='review-create'),
+    path('deliveries/create/', CreateDeliveryView.as_view(), name='create_delivery'),
 
     path('addresses/<int:pk>/', AddressViewSet.as_view({'get': 'retrieve','put':'update','patch':'partial_update','delete':'destroy'}), name='address-detail'),
     path('plastic-cards/<int:pk>/', PlasticCardViewSet.as_view({'get': 'retrieve' ,'put':'update','patch':'partial_update','delete':'destroy'}), name='plastic-card-detail'),
