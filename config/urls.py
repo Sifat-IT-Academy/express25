@@ -47,11 +47,8 @@ urlpatterns = [
     path('orders/', OrderListView.as_view(), name='order-list'),
     path('orders/<int:pk>/', OrderDetailView.as_view(), name='order-detail'),
     path('payments/', PaymentCreateView.as_view(), name='payment-create'),
-    path('deliveries/', DeliveryListView.as_view(), name='delivery-list'),
-    path('deliveries/<int:pk>/', DeliveryStatusView.as_view(), name='delivery-status'),
-    path('deliveries/<int:pk>/review/', ReviewCreateView.as_view(), name='review-create'),
-    path('deliveries/create/', CreateDeliveryView.as_view(), name='create_delivery'),
-
+    path('delivery/',include("delivery.urls") , name='delivery'),
+  
     path('addresses/<int:pk>/', AddressViewSet.as_view({'get': 'retrieve','put':'update','patch':'partial_update','delete':'destroy'}), name='address-detail'),
     path('plastic-cards/<int:pk>/', PlasticCardViewSet.as_view({'get': 'retrieve' ,'put':'update','patch':'partial_update','delete':'destroy'}), name='plastic-card-detail'),
     path('api/account/',include('accaunt.urls')),
