@@ -61,7 +61,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 AUTH_USER_MODEL = 'accaunt.User'
 
-# Set site ID for django-allauth
 SITE_ID = 1
 
 
@@ -77,7 +76,7 @@ REST_FRAMEWORK = {
 
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # Default
+    'django.contrib.auth.backends.ModelBackend',  
 ]
 
 
@@ -129,7 +128,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # or whatever duration you prefer
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
